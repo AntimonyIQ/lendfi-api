@@ -148,7 +148,7 @@ const readLends = async (req, res) => {
 
 const readAllLendsByUser = async (req, res) => {
     try {
-        const { user_id } = req.params;
+        const user_id = req.params.id;
     
         const lends = await Lending.find({ user: user_id });
     
@@ -168,7 +168,7 @@ const readAllLendsByUser = async (req, res) => {
 
 const readAllPublicLendsByUser = async (req, res) => {
     try {
-        const { user_id } = req.params;
+        const user_id = req.params.id;
     
         const lends = await Lending.find({ user: user_id, lend: 'public' });
     
@@ -188,7 +188,7 @@ const readAllPublicLendsByUser = async (req, res) => {
 
 const readAllPrivteLendsByUser = async (req, res) => {
     try {
-        const { user_id } = req.params;
+        const user_id = req.params.id;
     
         const lends = await Lending.find({ user: user_id, lend: 'private' });
     
