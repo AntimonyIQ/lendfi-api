@@ -85,31 +85,19 @@ async function deleteUser(req, res) {
 
 async function updateUser(req, res) {
     try {
-        const userId = req.params.id;
-        const updates = req.body;
-  
-        // Check if required fields are present
-        if (!updates.firstname || !updates.lastname || !updates.email) {
-            const data = {
-                success: false,
-                message: 'Required fields are missing',
-                data: null,
-            };
-            return res.status(400).json(data);
-        }
-  
-        // Perform additional validation on fields if needed
-        if (!isValidEmail(updates.email)) {
-            const data = {
-                success: false,
-                message: 'Invalid email format',
-                data: null,
-            };
-            return res.status(400).json(data);
-        }
+        const { user_id, firstname, lastname, email, wallet, username, picture } = req.body;
+
+        // Create the updates object
+        const updates = {};
+        if (firstname) updates.firstname = firstname;
+        if (lastname) updates.lastname = lastname;
+        if (email) updates.email = email;
+        if (wallet) updates.wallet = wallet;
+        if (username) updates.username = username;
+        if (picture) updates.picture = picture;
   
         // Update the user
-        const user = await User.findByIdAndUpdate(userId, updates, { new: true });
+        const user = await User.findByIdAndUpdate(user_id, updates, { new: true });
     
         if (!user) {
             const data = {
