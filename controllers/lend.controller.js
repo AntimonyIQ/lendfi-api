@@ -3,7 +3,7 @@ const User = require('../models/User');
 
 const createLend = async (req, res) => {
     try {
-        const { user_id, amount, lendCurrency, lendNetwork, interestRate, collateralDetails, lendRepaymentMethod, lend } = req.body;
+        const { user_id, amount, lendCurrency, lendNetwork, interestRate, collateralDetails, lendRepaymentMethod, lend, loanDuration } = req.body;
 
         const is_user = await User.findById(user_id);
         if (!is_user) {
@@ -12,7 +12,7 @@ const createLend = async (req, res) => {
                 message: 'User not found',
                 data: null
             });
-        }
+        } 
 
         const lending = new Lending({
             user: user_id,
@@ -22,7 +22,8 @@ const createLend = async (req, res) => {
             interestRate,
             collateralDetails,
             lendRepaymentMethod,
-            lend
+            lend,
+            loanDuration
         });
   
         const savedLending = await lending.save();
@@ -42,7 +43,7 @@ const createLend = async (req, res) => {
 
 const updateLend = async (req, res) => {
     try {
-        const { lend_id, user_id, amount, lendCurrency, lendNetwork, interestRate, collateralDetails, lendRepaymentMethod, lend } = req.body;
+        const { lend_id, user_id, amount, lendCurrency, lendNetwork, interestRate, collateralDetails, lendRepaymentMethod, lend, loanDuration } = req.body;
 
         const is_user = await User.findById(user_id);
         if (!is_user) {
@@ -63,7 +64,8 @@ const updateLend = async (req, res) => {
                 interestRate,
                 collateralDetails,
                 lendRepaymentMethod,
-                lend
+                lend,
+                loanDuration
             },
             { new: true }
         );
