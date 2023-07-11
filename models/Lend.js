@@ -13,7 +13,8 @@ const lendingSchema = new Schema({
     },
     lendCurrency: {
         type: String,
-        required: true,
+        enum: ['usdt', 'lendx'],
+        default: 'usdt',
     },
     lendNetwork: {
         type: String,
@@ -34,7 +35,8 @@ const lendingSchema = new Schema({
     },
     lendRepaymentMethod: {
         type: String,
-        required: true,
+        enum: ['usdt', 'lendx'],
+        default: 'usdt',
     },
     lend: {
         type: String,
