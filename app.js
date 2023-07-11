@@ -22,6 +22,7 @@ const transactionRoutes = require('./routes/transaction.routes');
 const userSettings = require('./routes/userSettings.routes');
 const policy = require('./routes/policy.routes');
 const searchRoutes = require('./routes/search.routes');
+const lendingRoutes = require('./routes/lend.route');
 
 
 const app = express();
@@ -82,6 +83,7 @@ app.use('/transactions', transactionRoutes);
 app.use('/settings', userSettings);
 app.use('/policy', policy);
 app.use('/search', searchRoutes);
+app.use('/lend', lendingRoutes);
 
 
 module.exports = app;
