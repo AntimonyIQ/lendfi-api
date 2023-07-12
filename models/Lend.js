@@ -43,6 +43,15 @@ const lendingSchema = new Schema({
         enum: ['public', 'private'],
         default: 'public',
     },
+    available: {
+        type: Boolean,
+        default: true,
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected', 'completed'],
+        default: 'pending'
+    },
     createdAt: {
         type: Date,
         default: Date.now,
