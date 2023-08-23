@@ -15,7 +15,7 @@ async function getAllUsers(req, res) {
         const data = {
             success: false,
             message: 'Error retrieving users',
-            data: []
+            error: error.message
         }
         res.status(500).json(data);
     }
@@ -77,7 +77,7 @@ async function deleteUser(req, res) {
         const data = {
             success: false,
             message: 'Error deleting user',
-            data: null,
+            error: error.message,
         };
         res.status(500).json(data);
     }
@@ -119,7 +119,7 @@ async function updateUser(req, res) {
         const data = {
             success: false,
             message: 'Error updating user',
-            data: null,
+            error: error.message,
         };
         res.status(500).json(data);
     }
