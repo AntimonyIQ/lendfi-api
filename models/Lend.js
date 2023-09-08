@@ -7,6 +7,10 @@ const lendingSchema = new Schema({
         ref: 'User',
         required: true,
     },
+    owner:{
+        type:String,
+        required:true,
+    },
     amount: {
         type: Number,
         required: true,
@@ -42,6 +46,14 @@ const lendingSchema = new Schema({
         type: String,
         enum: ['public', 'private'],
         default: 'public',
+    },
+    collateralFactor: {
+        type: Number,
+        default: 0,
+    },
+    LiquidationFactor: {
+        type: Number,
+        default: 0,
     },
     available: {
         type: Boolean,
