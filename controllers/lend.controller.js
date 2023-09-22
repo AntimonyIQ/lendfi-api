@@ -3,7 +3,7 @@ const User = require('../models/User');
 
 const createLend = async (req, res) => {
     try {
-        const { user_id, amount, lendCurrency, lendNetwork, interestRate, collateralDetails, lendRepaymentMethod, lend } = req.body;
+        const { user_id, owner, amount, lendCurrency, lendNetwork, interestRate, collateralDetails, lendRepaymentMethod, lend, loanDuration } = req.body;
 
         const is_user = await User.findById(user_id);
         if (!is_user) {
@@ -12,17 +12,19 @@ const createLend = async (req, res) => {
                 message: 'User not found',
                 data: null
             });
-        }
+        } 
 
         const lending = new Lending({
             user: user_id,
+            owner,
             amount,
             lendCurrency,
             lendNetwork,
             interestRate,
             collateralDetails,
             lendRepaymentMethod,
-            lend
+            lend,
+            loanDuration
         });
   
         const savedLending = await lending.save();
@@ -42,7 +44,7 @@ const createLend = async (req, res) => {
 
 const updateLend = async (req, res) => {
     try {
-        const { lend_id, user_id, amount, lendCurrency, lendNetwork, interestRate, collateralDetails, lendRepaymentMethod, lend } = req.body;
+        const { lend_id, user_id, owner, amount, lendCurrency, lendNetwork, interestRate, collateralDetails, lendRepaymentMethod, lend, loanDuration } = req.body;
 
         const is_user = await User.findById(user_id);
         if (!is_user) {
@@ -57,13 +59,15 @@ const updateLend = async (req, res) => {
             lend_id,
             {
                 user: user_id,
+                owner,
                 amount,
                 lendCurrency,
                 lendNetwork,
                 interestRate,
                 collateralDetails,
                 lendRepaymentMethod,
-                lend
+                lend,
+                loanDuration
             },
             { new: true }
         );
@@ -126,27 +130,9 @@ const deleteLend = async (req, res) => {
     }
 };
 
-const readLends = async (req, res) => {
-    try {
-        const lends = await Lending.find();
-    
-        res.status(200).json({
-            success: true,
-            message: 'Lends retrieved successfully',
-            data: lends
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Failed to retrieve lends',
-            error: error.message
-        });
-    }
-};
-
 const readAllLendsByUser = async (req, res) => {
     try {
-        const { user_id } = req.params;
+        const user_id = req.params.id;
     
         const lends = await Lending.find({ user: user_id });
     
@@ -166,7 +152,7 @@ const readAllLendsByUser = async (req, res) => {
 
 const readAllPublicLendsByUser = async (req, res) => {
     try {
-        const { user_id } = req.params;
+        const user_id = req.params.id;
     
         const lends = await Lending.find({ user: user_id, lend: 'public' });
     
@@ -184,9 +170,9 @@ const readAllPublicLendsByUser = async (req, res) => {
     }
 };
 
-const readAllPrivteLendsByUser = async (req, res) => {
+const readAllPrivateLendsByUser = async (req, res) => {
     try {
-        const { user_id } = req.params;
+        const user_id = req.params.id;
     
         const lends = await Lending.find({ user: user_id, lend: 'private' });
     
@@ -204,13 +190,49 @@ const readAllPrivteLendsByUser = async (req, res) => {
     }
 };
 
+const readAllLends = async (req, res, lendType) => {
+    try {
+        let query = {};
+        if (lendType !== 'all') {
+            query = { lend: lendType };
+        }
+        const lends = await Lending.find(query);
+        res.status(200).json({
+            success: true,
+            message: `${lendType} lends retrieved successfully`,
+            data: lends
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: `Failed to retrieve ${lendType} lends`,
+            error: error.message
+        });
+    }
+};
+
+const readAllLendsAll = async (req, res) => {
+    await readAllLends(req, res, 'all');
+};
+
+const readAllPrivateLends = async (req, res) => {
+    await readAllLends(req, res, 'private');
+};
+
+const readAllPublicLends = async (req, res) => {
+    await readAllLends(req, res, 'public');
+};
+
+
 
 module.exports = {
     updateLend,
     createLend,
     deleteLend,
-    readLends,
     readAllLendsByUser,
     readAllPublicLendsByUser,
-    readAllPrivteLendsByUser,
+    readAllPrivateLendsByUser,
+    readAllLendsAll,
+    readAllPrivateLends,
+    readAllPublicLends,
 }

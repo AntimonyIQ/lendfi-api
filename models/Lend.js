@@ -7,13 +7,18 @@ const lendingSchema = new Schema({
         ref: 'User',
         required: true,
     },
+    owner:{
+        type:String,
+        required:true,
+    },
     amount: {
         type: Number,
         required: true,
     },
     lendCurrency: {
         type: String,
-        required: true,
+        enum: ['usdt', 'lendx'],
+        default: 'usdt',
     },
     lendNetwork: {
         type: String,
@@ -34,12 +39,30 @@ const lendingSchema = new Schema({
     },
     lendRepaymentMethod: {
         type: String,
-        required: true,
+        enum: ['usdt', 'lendx'],
+        default: 'usdt',
     },
     lend: {
         type: String,
         enum: ['public', 'private'],
         default: 'public',
+    },
+    collateralFactor: {
+        type: Number,
+        default: 0,
+    },
+    LiquidationFactor: {
+        type: Number,
+        default: 0,
+    },
+    available: {
+        type: Boolean,
+        default: true,
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected', 'completed'],
+        default: 'pending'
     },
     createdAt: {
         type: Date,
